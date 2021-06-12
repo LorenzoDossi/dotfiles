@@ -14,7 +14,6 @@ let g:lion_squeeze_spaces = 1
 Plug 'a-mg/vim-wobble'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'Yggdroot/indentLine'
-Plug 'ap/vim-css-color'
 Plug 'amadeus/vim-convert-color-to'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
@@ -36,13 +35,17 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 call plug#end()
 
+let mapleader=" "
+
 " minimap
 let g:minimap_width = 10
+nnoremap <leader>ò :MinimapToggle<cr>
 let g:minimap_highlight_range = 1
-let g:minimap_auto_start = 1
 let g:minimap_auto_start_win_enter = 1
 
-
+set nobackup
+set nowritebackup
+set updatetime=300
 filetype plugin indent on
 syntax on
 
@@ -51,12 +54,9 @@ set ruler
 
 colorscheme material
 " set termguicolors
-" let g:gruvbox_invert_selection=0
-" let g:gruvbox_bold=0
 set background=dark
 let g:lightline = { 'colorscheme': 'material_vim' }
 
-let mapleader=" "
 set mouse=a
 set noswapfile
 set hidden " Allow buffers to have changes without being displayed
@@ -69,10 +69,11 @@ nnoremap <Leader><Tab> :buffer<Space><Tab>
 
 map ZZ <nop>
 map <C-z> <nop>
+
 " set number 
 set infercase " a better ignorecare
 
-set formatoptions-=cro " remove comment in new line
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 inoremap jk <esc>
 set splitbelow
@@ -93,6 +94,9 @@ set scrolloff=4
 " file handling --------------------
 nnoremap <leader>l <C-^>
 nnoremap <leader>q :bd<cr>
+
+" comment
+nnoremap <leader>c :Commentary<cr>
 
 " writes only if has changes
 nnoremap <leader>s :update<cr> 
@@ -172,3 +176,22 @@ function! JumpToCSS()
   endfunction
 
 " nnoremap <leader>g :call JumpToCSS()<CR>
+
+set cot=menu,menuone
+
+ino <BS> <BS><C-r>=getline('.')[col('.')-3:col('.')-2]=~#'\k\k'?!pumvisible()?"\<lt>C-n>\<lt>C-p>":'':pumvisible()?"\<lt>C-y>":''<CR>
+ino <CR> <C-r>=pumvisible()?"\<lt>C-y>":""<CR><CR>
+ino <Tab> <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Tab>"<CR>
+ino <S-Tab> <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>S-Tab>"<CR>
+
+augroup MyAutoComplete 
+  au!
+  au InsertCharPre * if
+        \ !exists('s:complete') &&
+        \ !pumvisible() &&
+        \ getline('.')[col('.')-2].v:char =~# '\k\k' |
+        \ let s:complete = 1 |
+        \ noautocmd call feedkeys("\<C-n>\<C-p>", "nt") |
+        \ endif
+  au CompleteDone * if exists('s:complete') | unlet s:complete | endif
+augroup END
