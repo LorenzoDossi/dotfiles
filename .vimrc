@@ -2,6 +2,11 @@ call plug#begin('~/.vim/plugged')
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 let g:material_theme_style='darker-community'
 Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-startify'
+Plug 'honza/vim-snippets'
+Plug 'sirver/UltiSnips'
+Plug 'tpope/vim-capslock'
+Plug 'AndrewRadev/tagalong.vim'
 Plug 'wfxr/minimap.vim'
 Plug 'kshenoy/vim-signature'
 Plug 'wellle/targets.vim'
@@ -9,7 +14,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'rhysd/clever-f.vim'
 let g:clever_f_across_no_line    = 1
 let g:clever_f_fix_key_direction = 1
-Plug 'tommcdo/vim-lion' "easy align maybe is better
+Plug 'junegunn/vim-easy-align'
 let g:lion_squeeze_spaces = 1
 Plug 'a-mg/vim-wobble'
 Plug 'christoomey/vim-tmux-navigator'
@@ -37,6 +42,8 @@ call plug#end()
 
 let mapleader=" "
 
+" Makes some actions smoother (?)
+set ttyfast
 " minimap
 let g:minimap_width = 10
 nnoremap <leader>ò :MinimapToggle<cr>
@@ -99,7 +106,7 @@ nnoremap <leader>q :bd<cr>
 nnoremap <leader>c :Commentary<cr>
 
 " writes only if has changes
-nnoremap <leader>s :update<cr> 
+nnoremap s :update<cr>h 
 
 " ask for confirm
 set confirm 
@@ -195,3 +202,8 @@ augroup MyAutoComplete
         \ endif
   au CompleteDone * if exists('s:complete') | unlet s:complete | endif
 augroup END
+
+" save buffer window position
+autocmd! BufWinLeave * let b:winview = winsaveview()
+autocmd! BufWinEnter * if exists('b:winview') | call winrestview(b:winview) | unlet b:winview
+
