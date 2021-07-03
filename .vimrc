@@ -2,7 +2,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 let g:material_theme_style='darker-community'
 Plug 'mhinz/vim-startify'
-Plug 'mhinz/vim-startify'
 Plug 'honza/vim-snippets'
 Plug 'sirver/UltiSnips'
 Plug 'tpope/vim-capslock'
@@ -79,6 +78,9 @@ map <C-z> <nop>
 
 " set number 
 set infercase " a better ignorecare
+
+" function utility
+map <leader>{ A<space>{<cr>
 
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
@@ -191,19 +193,19 @@ ino <CR> <C-r>=pumvisible()?"\<lt>C-y>":""<CR><CR>
 ino <Tab> <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Tab>"<CR>
 ino <S-Tab> <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>S-Tab>"<CR>
 
-augroup MyAutoComplete 
-  au!
-  au InsertCharPre * if
-        \ !exists('s:complete') &&
-        \ !pumvisible() &&
-        \ getline('.')[col('.')-2].v:char =~# '\k\k' |
-        \ let s:complete = 1 |
-        \ noautocmd call feedkeys("\<C-n>\<C-p>", "nt") |
-        \ endif
-  au CompleteDone * if exists('s:complete') | unlet s:complete | endif
-augroup END
+" augroup MyAutoComplete 
+"   au!
+"   au InsertCharPre * if
+"         \ !exists('s:complete') &&
+"         \ !pumvisible() &&
+"         \ getline('.')[col('.')-2].v:char =~# '\k\k' |
+"         \ let s:complete = 1 |
+"         \ noautocmd call feedkeys("\<C-n>\<C-p>", "nt") |
+"         \ endif
+"   au CompleteDone * if exists('s:complete') | unlet s:complete | endif
+" augroup END
 
-" save buffer window position
-autocmd! BufWinLeave * let b:winview = winsaveview()
-autocmd! BufWinEnter * if exists('b:winview') | call winrestview(b:winview) | unlet b:winview
+" " save buffer window position
+" autocmd! BufWinLeave * let b:winview = winsaveview()
+" autocmd! BufWinEnter * if exists('b:winview') | call winrestview(b:winview) | unlet b:winview
 
